@@ -19,8 +19,11 @@ class MW1 : public QMainWindow
 public:
     explicit MW1(QWidget *parent = 0);
     ~MW1();
+
     void paintEvent(QPaintEvent *e);
     void keyPressEvent(QKeyEvent *);
+protected slots:
+    void movement();
 
 private:
     Ui::MW1 *ui;

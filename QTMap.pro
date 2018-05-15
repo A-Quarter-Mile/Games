@@ -28,14 +28,16 @@ SOURCES += main.cpp\
     icon.cpp \
     rpgobj.cpp \
     player.cpp \
-    world.cpp
+    world.cpp \
+    monster.cpp
 
 HEADERS  += \
     mw1.h \
     icon.h \
     rpgobj.h \
     player.h \
-    world.h
+    world.h \
+    monster.h
 
 FORMS    += \
     mw1.ui

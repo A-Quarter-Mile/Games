@@ -1,20 +1,23 @@
 #include "world.h"
 #include "icon.h"
 #include<QPainter>
-
+#include<QTime>
+#include<QTimer>
+static int fl,step,total;
 void World::initWorld(string mapFile){
 
     //TODO 下面这部分逻辑应该是读入地图文件，生成地图上的对象
     //player 5 5
+
+    this->_monster.initObj("monster");
+    this->_monster.setPosX(4);
+    this->_monster.setPosY(5);
+
     this->_player.initObj("player");
     this->_player.setPosX(2);
     this->_player.setPosY(1);
 
-    /*this->_player.initObj("monster");
-    this->_player.setPosX(2);
-    this->_player.setPosY(5);*/
-
-    RPGObj obj3,m;
+    RPGObj obj3,m,obj4,obj5;
     RPGObj s[9][9];
     RPGObj t[20];
     int i,j;
@@ -73,6 +76,25 @@ void World::initWorld(string mapFile){
     obj3.setPosX(2);
     obj3.setPosY(8);
     f[2][8]=2;
+    this->_objs.push_back(obj3);
+
+    obj4.initObj("fruit");
+    obj4.setPosX(5);
+    obj4.setPosY(5);
+    f[5][5]=2;
+    this->_objs.push_back(obj4);
+
+    obj5.initObj("fruit");
+    obj5.setPosX(5);
+    obj5.setPosY(10);
+    f[5][10]=2;
+    this->_objs.push_back(obj5);
+
+    obj3.initObj("fruit");
+    obj3.setPosX(2);
+    obj3.setPosY(8);
+    f[2][8]=2;
+    this->_objs.push_back(obj3);
 
     m.initObj("monster");
     m.setPosX(6);
@@ -80,7 +102,7 @@ void World::initWorld(string mapFile){
     f[6][9]=3;
     this->_objs.push_back(m);
 
-    this->_objs.push_back(obj3);
+
     for (i=0;i<=19;i++)
     {
         this->_objs.push_back(t[i]);
@@ -111,7 +133,8 @@ void World::show(QPainter * painter){
     for(it=this->_objs.begin();it!=this->_objs.end();it++){
         (*it).show(painter);
     }
-    if (flag==1)
+    this->_monster.show(painter);
+    if (flag==0)
     {
         this->_player.show(painter);
     }
@@ -119,6 +142,7 @@ void World::show(QPainter * painter){
 
 void World::handlePlayerMove(int direction, int steps){
     int xx,yy;
+    //flag=1;
     xx=_player.getPosX();
     yy=_player.getPosY();
     switch (direction){
@@ -171,9 +195,68 @@ void World::handlePlayerMove(int direction, int steps){
     }
     else if (f[xx][yy+1]==3)
     {
-        flag=0;
-
+        flag=1;
     }
 
 }
+void World::handleMonsterMove(int direction, int steps){
+    int xx,yy;
+    //flag=1;
+    xx=_monster.getPosX();
+    yy=_monster.getPosY();
+    switch (direction){
+        case 1:
+            yy -= steps;
+            break;
+        case 2:
+            yy += steps;
+            break;
+        case 3:
+            xx -= steps;
+            break;
+        case 4:
+            xx += steps;
+            break;
+    }
+    if (xx<0||yy<0||xx>=12||yy>=12||yy+1<0||yy+1>=12)
+       return;
+    if (f[xx][yy]==1)
+        this->_monster.move(direction, steps);
+    else if (f[xx][yy]==0)
+        return;
+    else if (f[xx][yy]==2)
+    {
+        int x=xx;
+        int y=yy;
+        auto it=_objs.begin();
+        auto the_it=it;
+        bool g=0;
+        while (it!=_objs.end())
+        {
+            if (it->canEat())
+            {
+                int x1=it->getPosX(),x2=x1+it->getWidth();
+                int y1=it->getPosY(),y2=y1+it->getHeight();
+                if (x1<=x&&x2>x&&y>=y1&&y<y2)
+                {
+                    the_it=it;
+                    g=1;
+                    break;
+                }
+            }
+            ++it;
+        }
+        if (g)
+        {
+            _objs.erase(the_it);
+        }
+        this->_monster.move(direction, steps);
+    }
+    else if (f[xx][yy]==3)
+    {
+        flag=1;
+    }
+
+}
+
 

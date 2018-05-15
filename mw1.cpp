@@ -1,6 +1,8 @@
 #include "mw1.h"
 #include "ui_mw1.h"
 #include "icon.h"
+#include<QTime>
+#include<QTimer>
 
 #include <map>
 #include <iostream>
@@ -12,9 +14,20 @@ MW1::MW1(QWidget *parent) :
     ui(new Ui::MW1)
 {
     ui->setupUi(this);
-
+    QTimer *timer=new QTimer(this);
+    //timer2 = new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(movement()));//timeoutslot()为自定义槽
+    timer->start(100);
     //init game world
     _game.initWorld("");//TODO 应该是输入有效的地图文件
+}
+void MW1::movement()
+{
+    int d[4]={1,2,3,4};
+    srand(time(0));
+    int k=d[rand()%4];
+    this->_game.handleMonsterMove(k, 1);
+    this->update();
 }
 
 MW1::~MW1()

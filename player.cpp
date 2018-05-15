@@ -1,3 +1,5 @@
+#include<QTime>
+#include<QTimer>
 #include "player.h"
 
 //direction =1,2,3,4 for 上下左右

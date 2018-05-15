@@ -37,7 +37,7 @@ void RPGObj::initObj(string type)
 
     this->_icon = ICON::findICON(type);
     QImage all;
-    all.load("/Users/a-quartermile/Desktop/QTMap/TileB.png");
+    all.load("/Users/a-quartermile/Desktop/Games/TileB.png");
     this->_pic = all.copy(QRect(_icon.getSrcX()*ICON::GRID_SIZE, _icon.getSrcY()*ICON::GRID_SIZE, _icon.getWidth()*ICON::GRID_SIZE, _icon.getHeight()*ICON::GRID_SIZE));
 }
 

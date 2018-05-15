@@ -5,7 +5,9 @@
 #include <string>
 #include <QPainter>
 #include "player.h"
-
+#include "Monster.h"
+#include<QTime>
+#include<QTimer>
 class World
 {
 public:
@@ -21,6 +23,7 @@ public:
     void show(QPainter * painter);
         //显示游戏世界所有对象
     void handlePlayerMove(int direction, int steps);
+    void handleMonsterMove(int direction, int steps);
         //假定只有一个玩家
     //QPainterPath shape();
     Player getplayer()
@@ -34,6 +37,8 @@ public:
 private:
     vector<RPGObj> _objs;
     Player _player;
+    Monster _monster;
+    //Monster _monster;
 };
 
 #endif // WORLD_H
